@@ -93,14 +93,10 @@ app.put('/todos/:id', checksExistsUserAccount, checkExistTodoUser, (request, res
   const { user } = request;
   const { id } = request.params;
 
-  const todo = user.todos.filter((todo) => {
-    if (todo.id === id) {
-      todo.title = title;
-      todo.deadline = new Date(deadline);
-      return true;
-    }
-    return false;
-  })[0];
+  const todo = user.todos.find(todo => todo.id === id);
+
+  todo.title = title;
+  todo.deadline = new Date(deadline);
 
   return response.status(200).json(todo);
 
@@ -110,14 +106,9 @@ app.patch('/todos/:id/done', checksExistsUserAccount, checkExistTodoUser, (reque
 
   const { user } = request;
   const { id } = request.params;
+  const todo = user.todos.find(todo => todo.id === id);
 
-  const todo = user.todos.filter((todo) => {
-    if (todo.id === id) {
-      todo.done = true;
-      return true;
-    }
-    return false;
-  })[0];
+  todo.done = true;
 
   return response.status(200).json(todo);
 
